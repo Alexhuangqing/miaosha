@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.imooc.miaosha.result.CodeMsg;
 import com.imooc.miaosha.result.Result;
 
+/**
+ * 定义全局异常处理器，接受不同的异常，获取异常信息。响应“数据请求”
+ */
 @ControllerAdvice
 @ResponseBody
 public class GlobalExceptionHandler {

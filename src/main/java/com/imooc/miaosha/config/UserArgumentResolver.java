@@ -16,12 +16,23 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import com.imooc.miaosha.domain.MiaoshaUser;
 import com.imooc.miaosha.service.MiaoshaUserService;
 
+/**
+ * 封装控制层得到 “用户信息”的 的业务逻辑
+ *
+ * 解析 MiaoshaUser 参数
+ */
+
 @Service
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
 	@Autowired
 	MiaoshaUserService userService;
-	
+
+	/**
+	 * 当控制层的参数为  MiaoshaUser 的时候，启用该参数解析器
+	 * @param parameter
+	 * @return
+	 */
 	public boolean supportsParameter(MethodParameter parameter) {
 		Class<?> clazz = parameter.getParameterType();
 		return clazz==MiaoshaUser.class;
@@ -31,12 +42,23 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 		HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
-		
+		/**
+		 * 请求参数中携带token  常见于移动端
+		 */
 		String paramToken = request.getParameter(MiaoshaUserService.COOKI_NAME_TOKEN);
+
+		/**
+		 * 从浏览器cookie中 获取token
+		 */
 		String cookieToken = getCookieValue(request, MiaoshaUserService.COOKI_NAME_TOKEN);
 		if(StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
 			return null;
 		}
+
+		/**
+		 * 当两者中都携带token信息
+		 * 优先获取请求参数的token值
+		 */
 		String token = StringUtils.isEmpty(paramToken)?cookieToken:paramToken;
 		return userService.getByToken(response, token);
 	}

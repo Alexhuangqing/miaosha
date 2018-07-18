@@ -6,6 +6,9 @@ import org.hibernate.validator.constraints.Length;
 
 import com.imooc.miaosha.validator.IsMobile;
 
+/**
+ * 封装前台控制器的参数信息
+ */
 public class LoginVo {
 	
 	@NotNull

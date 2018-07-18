@@ -43,7 +43,12 @@ public class CodeMsg {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
-	
+
+	/**
+	 * 格式化异常信息
+	 * @param args
+	 * @return
+	 */
 	public CodeMsg fillArgs(Object... args) {
 		int code = this.code;
 		String message = String.format(this.msg, args);

@@ -49,6 +49,9 @@ public class MiaoshaUserService {
 
 	public boolean login(HttpServletResponse response, LoginVo loginVo) {
 		if(loginVo == null) {
+			/**
+			 * 定义自定义异常，利用抛异常的方式，抛出错误的访问信息
+			 */
 			throw new GlobalException(CodeMsg.SERVER_ERROR);
 		}
 		String mobile = loginVo.getMobile();
