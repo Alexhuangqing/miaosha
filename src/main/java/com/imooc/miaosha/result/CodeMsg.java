@@ -22,6 +22,9 @@ public class CodeMsg {
 	//订单模块 5004XX
 	
 	//秒杀模块 5005XX
+	public static CodeMsg MIAO_SHA_OVER = new CodeMsg(500501, "秒杀商品没有库存了");
+	public static CodeMsg MIAO_SHA_REPEAT = new CodeMsg(500501, "秒杀失败");
+
 	
 	private CodeMsg( ) {
 	}
