@@ -55,6 +55,22 @@ public class RedisService {
 			  returnToPool(jedis);
 		 }
 	}
+
+	/**
+	 * 删除
+	 */
+	public boolean delete(KeyPrefix prefix, String key) {
+		Jedis jedis = null;
+		try {
+			jedis =  jedisPool.getResource();
+			//生成真正的key
+			String realKey  = prefix.getPrefix() + key;
+			Long del = jedis.del(realKey);
+			return  del > 0;
+		}finally {
+			returnToPool(jedis);
+		}
+	}
 	
 	/**
 	 * 判断key是否存在
@@ -138,5 +154,6 @@ public class RedisService {
 			 jedis.close();
 		 }
 	}
+
 
 }

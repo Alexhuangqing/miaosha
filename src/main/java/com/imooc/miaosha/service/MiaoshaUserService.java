@@ -28,9 +28,40 @@ public class MiaoshaUserService {
 	
 	@Autowired
 	RedisService redisService;
-	
+
+	//对象级缓存
 	public MiaoshaUser getById(long id) {
-		return miaoshaUserDao.getById(id);
+		//先从缓存中取出数据
+		MiaoshaUser user = redisService.get(MiaoshaUserKey.getById, "" + id, MiaoshaUser.class);
+		if(user!=null){
+			return user;
+		}
+		//再从数据库中取出数据
+		 user = miaoshaUserDao.getById(id);
+		if(user!=null){
+			redisService.set(MiaoshaUserKey.getById, "" + id,user);
+		}
+		return user;
+	}
+	
+	//更新对象级缓存
+	public boolean updatePassword(long id,String token,String formPassword){
+		//验证用户有效
+		MiaoshaUser user = getById(id);
+		if(user==null){
+			throw  new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+		}
+		//更新数据库
+		MiaoshaUser passToUpdate  = new MiaoshaUser();
+		passToUpdate.setId(id);
+		passToUpdate.setPassword(MD5Util.formPassToDBPass(formPassword,user.getSalt()));
+		miaoshaUserDao.updatePassword(passToUpdate);
+		//更新缓存
+		redisService.delete(MiaoshaUserKey.getById, "" + id);
+		user.setPassword(passToUpdate.getPassword());
+		redisService.set(MiaoshaUserKey.token,token,getById(id));
+
+		return true;
 	}
 	
 
@@ -47,7 +78,7 @@ public class MiaoshaUserService {
 	}
 	
 
-	public boolean login(HttpServletResponse response, LoginVo loginVo) {
+	public String login(HttpServletResponse response, LoginVo loginVo) {
 		if(loginVo == null) {
 			/**
 			 * 定义自定义异常，利用抛异常的方式，抛出错误的访问信息
@@ -71,7 +102,7 @@ public class MiaoshaUserService {
 		//生成cookie
 		String token	 = UUIDUtil.uuid();
 		addCookie(response, token, user);
-		return true;
+		return token;
 	}
 	
 	private void addCookie(HttpServletResponse response, String token, MiaoshaUser user) {

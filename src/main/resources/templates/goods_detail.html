@@ -86,7 +86,7 @@ function countDown(){
         times = setTimeout(function () {
             $("#remainSeconds").val(remainSeconds-1);
             $("#countDown").text(remainSeconds-1);
-            //刷新判断逻辑
+            //手动触发
             countDown();
         },1000);
 
