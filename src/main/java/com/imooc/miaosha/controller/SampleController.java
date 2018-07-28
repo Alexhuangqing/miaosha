@@ -1,5 +1,6 @@
 package com.imooc.miaosha.controller;
 
+import com.imooc.miaosha.rabbitmq.MQSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,13 +23,45 @@ public class SampleController {
 	
 	@Autowired
 	RedisService redisService;
+
+	@Autowired
+    MQSender mqSender;
 	
     @RequestMapping("/hello")
     @ResponseBody
     public Result<String> home() {
         return Result.success("Hello，world");
     }
-    
+
+
+    @RequestMapping("/sender")
+    @ResponseBody
+    public Result<String> send() {
+        mqSender.sender("hello world");
+        return Result.success("Hello，world");
+    }
+
+    @RequestMapping("/mq/topic")
+    @ResponseBody
+    public Result<String> sendTopic() {
+        mqSender.senderTopic("hello world");
+
+        return Result.success("Hello，world");
+    }
+    @RequestMapping("/mq/fanout")
+    @ResponseBody
+    public Result<String> sendFanout() {
+        mqSender.senderFanout("hello world");
+
+        return Result.success("Hello，world");
+    }
+    @RequestMapping("/mq/header")
+    @ResponseBody
+    public Result<String> sendHeader() {
+        mqSender.senderHeader("hello world");
+        return Result.success("Hello，world");
+    }
+
     @RequestMapping("/error")
     @ResponseBody
     public Result<String> error() {
