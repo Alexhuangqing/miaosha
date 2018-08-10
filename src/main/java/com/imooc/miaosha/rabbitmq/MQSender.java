@@ -21,6 +21,31 @@ public class MQSender {
     @Autowired
     AmqpTemplate amqpTemplate ;
 
+
+
+
+    /**
+     *  direct模式 发送信息
+     */
+    public void senderMiaosha(Object message){
+        String msg =RedisService.beanToString(message);
+        logger.info("秒杀信息入队:"+msg);
+        amqpTemplate.convertAndSend(MQConfig.MIAOSHA_QUEUE,msg);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      *  direct模式 发送信息
      */

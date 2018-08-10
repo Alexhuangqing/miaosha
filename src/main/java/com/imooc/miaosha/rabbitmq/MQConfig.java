@@ -17,6 +17,10 @@ import java.util.Map;
 @Configuration
 public class MQConfig {
 
+
+
+
+
     //    Direct模式
     public static final String QUEUE = "queue";
     //    Topic模式
@@ -31,18 +35,46 @@ public class MQConfig {
     //Header模式
     public static final String HEADER_EXCHANGE = "header_exchange";
     public static final String HEADER_QUEUE = "header_queue";
+
+    //秒杀业务
+    public static final String MIAOSHA_QUEUE = "miaosha_queue";
+
+
+    @Bean
+    public Queue miaosha(){
+        return new Queue(MIAOSHA_QUEUE,true);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Direct 模式
      */
+/*
     @Bean
     public Queue queue() {
         return new Queue(QUEUE, true);
     }
+*/
 
     /**
      * Topic 模式(路由列表)
      */
-    @Bean
+ /*   @Bean
     public Queue topicQueue1() {
         return new Queue(TOPIC_QUEUE1, true);
     }
@@ -51,12 +83,12 @@ public class MQConfig {
     public Queue topicQueue2() {
         return new Queue(TOPIC_QUEUE2, true);
     }
-
+*/
     /**
      * 这里返回值只能为具体的TopicExchange类型，不能为Exchange
      * 因为后面绑定中，不同的参数（Exchange）类型，会重载不同的方法
      */
-    @Bean
+ /*   @Bean
     public TopicExchange topicExchange() {
         return new TopicExchange(TOPIC_EXCHANGE);
     }
@@ -72,12 +104,12 @@ public class MQConfig {
         //topic_queue2  路由  topic.#
         return BindingBuilder.bind(topicQueue2()).to(topicExchange()).with(TOPIC_KEY2);
     }
-
+*/
 
     /**
      * Fanout 模式（广播）
      */
-    @Bean
+  /*  @Bean
     public FanoutExchange fanoutExchange() {
         return new FanoutExchange(FANOUT_EXCHANGE);
     }
@@ -90,12 +122,12 @@ public class MQConfig {
     public Binding bindingFanout2() {
 
         return BindingBuilder.bind(topicQueue2()).to(fanoutExchange());
-    }
+    }*/
 
     /**
      * Header 模式（过滤消息）
      */
-    @Bean
+  /*  @Bean
     public Queue queue3() {
         return new Queue(HEADER_QUEUE, true);
     }
@@ -110,7 +142,7 @@ public class MQConfig {
         headerValues.put("id","123");
         headerValues.put("pw","123");
         return BindingBuilder.bind(queue3()).to(headerExchange()).whereAll(headerValues).match();
-    }
+    }*/
 
 
 }

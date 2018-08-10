@@ -43,13 +43,14 @@ public class OrderService {
         orderInfo.setOrderChannel(1);
         orderInfo.setStatus(0);
         orderInfo.setUserId(user.getId());
-        long  orderId = orderDao.insetOrdereInfo(orderInfo);
+         orderDao.insetOrdereInfo(orderInfo);//插入后，自动将自增ID封装到bean中
 
         MiaoshaOrder miaoshaOrder = new MiaoshaOrder();
-        miaoshaOrder.setOrderId(orderId);
+        miaoshaOrder.setOrderId(orderInfo.getId());
         miaoshaOrder.setUserId(user.getId());
         miaoshaOrder.setGoodsId(goodsVo.getId());
         orderDao.insertMiaoshaOrder(miaoshaOrder);
+        //存入redis缓存
         redisService.set(OrderKey.getOrderByUserIdAndGoodsId,""+user.getId()+"_"+goodsVo.getId(),miaoshaOrder);
         return  orderInfo;
     }

@@ -28,10 +28,12 @@ public class GoodsService {
         return  goodsDao.getGoodsVoById(goodsId);
     }
 
-    public void reduceStock(GoodsVo goodsVo) {
+    public boolean reduceStock(GoodsVo goodsVo) {
         MiaoshaGoods miaoshaGoods = new MiaoshaGoods();
         miaoshaGoods.setGoodsId(goodsVo.getId());
-        goodsDao.updateMiaoshaGoods(miaoshaGoods);
+        //更新后，返回更新的记录数目
+        int updated = goodsDao.updateMiaoshaGoods(miaoshaGoods);
+        return updated > 0;
     }
 
 
